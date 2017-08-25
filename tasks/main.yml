@@ -1,0 +1,20 @@
+---
+# tasks/main.yml
+
+- include: setup.yml
+
+- include: symlink.yml
+  when: ocstore_environment != 'development'
+
+- include: cleanup.yml
+  when: ocstore_environment != 'development'
+
+- include: cache.yml
+  become: yes
+
+- include: log.yml
+  become: yes
+
+- include: restart.yml
+
+- include: notify.yml

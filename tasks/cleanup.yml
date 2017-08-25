@@ -1,0 +1,8 @@
+---
+# tasks/cleanup.yml
+
+- name: ocStore | Rollback | Remove rolled back version
+  file:
+    state: absent
+    path: "{{ ocstore_releases_path.stdout }}/{{ ocstore_current_release_version.stdout }}"
+  when: ocstore_remove_rolled_back

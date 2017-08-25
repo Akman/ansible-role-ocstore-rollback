@@ -1,0 +1,13 @@
+---
+# defaults/main.yml
+
+ocstore_hostname: "localhost"
+
+ocstore_www_root: "/var/www/{{ ocstore_hostname }}"
+
+ocstore_releases_dir: "releases"
+ocstore_current_dir: "current"
+
+ocstore_remove_rolled_back: yes
+
+ocstore_rollback_to_release: ""

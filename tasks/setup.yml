@@ -1,0 +1,8 @@
+---
+# tasks/setup.yml
+
+- name: ocStore | Rollback | Set current environment
+  set_fact:
+    ocstore_environment: "{{ lookup('env','ANSIBLE_ENV') | default('development') }}"
+  run_once: true
+  when: ocstore_environment is not defined
