@@ -1,10 +1,10 @@
 ---
 # tasks/main.yml
 
-- include: symlink.yml
+- import_tasks: symlink.yml
   when: ocstore_environment != 'development'
 
-- include: cleanup.yml
+- import_tasks: cleanup.yml
   when: ocstore_environment != 'development'
 
-- include: restart.yml
+- import_tasks: restart.yml
