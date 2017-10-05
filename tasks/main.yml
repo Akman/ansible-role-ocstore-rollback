@@ -4,7 +4,8 @@
 - import_tasks: symlink.yml
   when: ocstore_environment != 'development'
 
-- import_tasks: cleanup.yml
+- import_tasks: cache.yml
   when: ocstore_environment != 'development'
 
-- import_tasks: restart.yml
+- import_tasks: cleanup.yml
+  when: ocstore_environment != 'development'

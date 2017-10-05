@@ -1,13 +1,10 @@
 ---
 # tasks/symlink.yml
 
-- name: ocStore | Rollback | Get releases path
-  command: echo "{{ ocstore_www_root }}/{{ ocstore_releases_dir }}"
-  register: ocstore_releases_path
-
 - name: ocStore | Rollback | Get number of releases
-  shell: echo `ls -1t {{ ocstore_releases_path.stdout }} | wc -l`
+  shell: echo `ls -1t {{ ocstore_www_root }}/{{ ocstore_releases_dir }} | wc -l`
   register: ocstore_versions_count
+  changed_when: false
 
 - name: ocStore | Rollback | Check if there is more than one release
   fail:
@@ -15,14 +12,16 @@
   when: ocstore_versions_count.stdout|int <= 1
 
 - name: ocStore | Rollback | Get current release version
-  shell: echo `ls -1t {{ ocstore_releases_path.stdout }} | head -n 1`
+  shell: echo `ls -1t {{ ocstore_www_root }}/{{ ocstore_releases_dir }} | head -n 1`
   register: ocstore_current_release_version
+  changed_when: false
 
 - name: ocStore | Rollback | Get rollback release version
   stat:
-    path: "{{ ocstore_releases_path.stdout }}/{{ ocstore_rollback_to_release }}"
+    path: "{{ ocstore_www_root }}/{{ ocstore_releases_dir }}/{{ ocstore_rollback_to_release }}"
   register: stat_rollback_release_version
   when: ocstore_rollback_to_release != ""
+  changed_when: false
 
 - name: ocStore | Rollback | Check that the provided rollback release exists
   fail:
@@ -30,19 +29,10 @@
   when: ocstore_rollback_to_release != "" and (stat_rollback_release_version.stat.exists is not defined or stat_rollback_release_version.stat.isdir == False)
 
 - name: ocStore | Rollback | Get previous releases version
-  shell: echo `ls -1t {{ ocstore_releases_path.stdout }} | head -n 2 | tail -n 1`
+  shell: echo `ls -1t {{ ocstore_www_root }}/{{ ocstore_releases_dir }} | head -n 2 | tail -n 1`
   register: ocstore_previous_release_version
+  changed_when: false
 
 - name: ocStore | Rollback | Get rollback release version
   set_fact:
     ocstore_rollback_release_version: "{{ ocstore_rollback_to_release if ocstore_rollback_to_release != '' else ocstore_previous_release_version.stdout }}"
-
-- name: ocStore | Rollback | Get release path
-  command: echo "{{ ocstore_releases_path.stdout }}/{{ ocstore_rollback_release_version }}"
-  register: ocstore_release_path
-
-- name: ocStore | Rollback | Change symlink from current release to previous one
-  file:
-    state: link
-    path: "{{ ocstore_www_root }}/{{ ocstore_current_dir }}"
-    src: "{{ ocstore_www_root }}/{{ ocstore_releases_dir }}/{{ ocstore_rollback_release_version }}"
