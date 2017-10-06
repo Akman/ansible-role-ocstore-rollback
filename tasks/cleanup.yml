@@ -7,11 +7,13 @@
     path: "{{ ocstore_www_root }}/{{ ocstore_current_dir }}"
     src: "{{ ocstore_www_root }}/{{ ocstore_releases_dir }}/{{ ocstore_rollback_release_version }}/{{ ocstore_public_dir }}"
 
-- name: restart php-fpm
+- name: ocStore | Rollback | Restart services
   service:
-    name: php7.0-fpm
-    state: restarted
-  become: yes
+    name: "{{ item }}"
+    state: "restarted"
+  with_items:
+    - "php7.0-fpm"
+  become: "yes"
 
 - name: ocStore | Rollback | Remove rolled back version
   file:
