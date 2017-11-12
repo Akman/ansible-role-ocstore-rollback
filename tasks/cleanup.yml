@@ -9,6 +9,24 @@
   with_flattened:
     - "{{ ocstore_shared_template_files }}"
 
+- name: ocStore | Rollback | Read REVISION file from previous release
+  shell: cat "{{ ocstore_www_root }}/{{ ocstore_releases_dir }}/{{ ocstore_rollback_release_version }}/REVISION"
+  register: ocstore_previous_release_revision
+  changed_when: false
+
+- name: ocStore | Rollback | Get rollback release version
+  set_fact:
+    ocstore_rollback_revision: "{{ ocstore_previous_release_revision.stdout if ocstore_previous_release_revision.stdout[:1] != '+' and ocstore_previous_release_revision.stdout[:1] != '-' else ocstore_previous_release_revision.stdout[1:] }}"
+
+- name: ocStore | Rollback | Mark previous release as rolled back
+  copy:
+    content: "-{{ ocstore_rollback_revision }}"
+    dest: "{{ ocstore_www_root }}/{{ ocstore_releases_dir }}/{{ ocstore_rollback_release_version }}/REVISION"
+    mode: "600"
+    group: "{{ ocstore_www_owner_user }}"
+    owner: "{{ ocstore_www_owner_user }}"
+  become: yes
+
 - name: ocStore | Rollback | Change symlink from current release to previous one
   file:
     state: link
