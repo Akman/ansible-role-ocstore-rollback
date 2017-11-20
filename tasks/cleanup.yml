@@ -22,8 +22,8 @@
   copy:
     content: "-{{ ocstore_rollback_revision }}"
     dest: "{{ ocstore_www_root }}/{{ ocstore_releases_dir }}/{{ ocstore_rollback_release_version }}/REVISION"
-    mode: "600"
-    group: "{{ ocstore_www_owner_user }}"
+    mode: "660"
+    group: "{{ ocstore_www_owner_group }}"
     owner: "{{ ocstore_www_owner_user }}"
   become: yes
 
