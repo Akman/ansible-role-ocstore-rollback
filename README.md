@@ -1,4 +1,4 @@
-# Ansible Role: ocstore-rollback
+# Ansible Role: ocstore_rollback
 
 Rollback ocStore on Linux.
 
@@ -29,7 +29,7 @@ None.
 
     - hosts: all
       roles:
-        - Akman.ocstore-rollback
+        - Akman.ocstore_rollback
 
 *Inside `vars/main.yml`*:
 
