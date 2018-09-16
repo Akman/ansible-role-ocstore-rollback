@@ -4,6 +4,7 @@
 dependencies: []
 
 galaxy_info:
+  role_name: ocstore_rollback
   author: Akman
   description: ocStore Rollbacker for Linux
   license: "license (MIT)"
